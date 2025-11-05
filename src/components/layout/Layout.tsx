@@ -15,7 +15,7 @@ export default function Layout({ routes, children }: LayoutProps) {
       <Topbar routes={routes} />
 
       <Flex w={"full"} h={"full"}>
-        <Box px={4} pt={6}>
+        <Box w={"full"} px={4} pt={6}>
           {children}
 
           {/* Bottom space/padding */}
