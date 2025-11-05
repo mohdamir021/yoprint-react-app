@@ -11,6 +11,7 @@ import React from "react";
 import { RouteType } from "../../App";
 import { IoMenu } from "react-icons/io5";
 import { LuSearch } from "react-icons/lu";
+import { Link } from "react-router-dom";
 
 interface TopbarProps {
   routes: RouteType[];
@@ -31,17 +32,24 @@ export default function Topbar({ routes }: TopbarProps) {
       // bgColor={"pink"}
     >
       <Flex
-      // Outline
-      // bgColor={"blue"}
+        gap={2}
+        // Outline
+        // bgColor={"blue"}
       >
-        <Text>Anime Search</Text>
+        <Text mr={3}>Anime Search</Text>
+
+        {routes.map(({ path, caption }, index) => (
+          <Link key={`${index}-link-to-${path}`} to={path}>
+            <Box>{caption}</Box>
+          </Link>
+        ))}
       </Flex>
 
       <Flex
         gap={2}
         alignItems={"center"}
         w={"full"}
-        maxW={"600px"}
+        maxW={"400px"}
         // Outline
         // bgColor={"red"}
       >
@@ -51,7 +59,7 @@ export default function Topbar({ routes }: TopbarProps) {
           flex={"1"}
           startElement={<LuSearch />}
         >
-          <Input w={"full"} maxW={"600px"} placeholder="Search anime" />
+          <Input w={"full"} placeholder="Search anime" />
         </InputGroup>
         <IconButton
           // Outline
