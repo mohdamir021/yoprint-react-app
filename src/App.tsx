@@ -4,6 +4,7 @@ import Home from "./pages/Home";
 import List from "./pages/List";
 import Layout from "./components/layout/Layout";
 import { Box } from "@chakra-ui/react";
+import Show from "./pages/Show";
 
 export interface RouteType {
   caption: string;
@@ -15,6 +16,12 @@ const routes: RouteType[] = [
   { caption: "Home", path: "/", element: <Home /> },
   { caption: "List", path: "/list", element: <List /> },
 ];
+
+const hiddenRoutes: RouteType[] = [
+  {caption: "Show", path: "/show", element: <Show />}
+]
+
+const allRoutes: RouteType[] = [...routes, ...hiddenRoutes]
 
 function App() {
   // const [count, setCount] = useState(0);
@@ -29,7 +36,7 @@ function App() {
       <Layout routes={routes}>
         {/* Routes Configuration */}
         <Routes>
-          {routes.map(({ path, element }, index) => (
+          {allRoutes.map(({ path, element }, index) => (
             <Route key={`${index}_${path}`} path={path} element={element} />
           ))}
         </Routes>
