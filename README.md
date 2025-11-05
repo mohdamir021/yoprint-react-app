@@ -47,3 +47,15 @@ Axios is a promise-based HTTP Client for `node.js` and the browser. It is a pack
 It is an easier way to handle request and response from the API and especially supports Promise API.
 
 The Axios documentation page is available [here](https://axios-http.com/docs/intro) for more information.
+
+
+### Project Structuring practice based on Online Sources
+
+- [Libs vs Utils vs Services Folders](https://medium.com/@a.m.housen/libs-vs-utils-vs-services-folders-simple-explanation-for-developers-0ae961539a0f)
+
+## PERSONAL
+
+### Chakra UI Useful features
+- [Float](https://www.chakra-ui.com/docs/components/float) - Make component has a floating notification/alert-like value.
+- [Wrap](https://www.chakra-ui.com/docs/components/wrap) - Used to add space between elements and wraps automatically if there isn't enough space.
+- [Tag](https://www.chakra-ui.com/docs/components/tag)
