@@ -5,6 +5,7 @@ import List from "./pages/List";
 import Layout from "./components/layout/Layout";
 import { Box } from "@chakra-ui/react";
 import Show from "./pages/Show";
+import NotFound from "./pages/NotFound";
 
 export interface RouteType {
   caption: string;
@@ -18,7 +19,8 @@ const routes: RouteType[] = [
 ];
 
 const hiddenRoutes: RouteType[] = [
-  {caption: "Show", path: "/show", element: <Show />}
+  {caption: "Show", path: "/show/:id", element: <Show />},
+  {caption: "Not Found", path: "*", element: <NotFound />}
 ]
 
 const allRoutes: RouteType[] = [...routes, ...hiddenRoutes]
