@@ -27,7 +27,7 @@ src/
 
 ### Basic Implementation of React Router Dom
 ```
-In React + Vite with Typescript project, how to implement a basic routing with react-router-dom with simple but detailed explanation. Please include steps for url parameters, query paramaters and nested routes.
+In React + Vite with Typescript project, how to implement a basic routing with react-router-dom with simple but detailed explanation. Please include steps for url parameters, query paramaters and nested routes, including handling Not Found route.
 ```
 
 Summary:
