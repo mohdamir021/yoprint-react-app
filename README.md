@@ -59,3 +59,10 @@ The Axios documentation page is available [here](https://axios-http.com/docs/int
 - [Float](https://www.chakra-ui.com/docs/components/float) - Make component has a floating notification/alert-like value.
 - [Wrap](https://www.chakra-ui.com/docs/components/wrap) - Used to add space between elements and wraps automatically if there isn't enough space.
 - [Tag](https://www.chakra-ui.com/docs/components/tag)
+
+### Library Implementation
+- [Axios Instance](https://axios-http.com/docs/instance) - Make a reusable API instance.
+- [Moment.js](https://momentjs.com/) - Ease of date format helpers
+
+### Web References / Tools that helps
+- [JSON to Typescript](https://transform.tools/json-to-typescript) - Paste JSON and transform into types and interfaces
