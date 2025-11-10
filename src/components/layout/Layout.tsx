@@ -11,7 +11,7 @@ type LayoutProps = {
 
 export default function Layout({ routes, children }: LayoutProps) {
   return (
-    <Box w={"full"} h={"full"}>
+    <Box w={"full"} h={"full"} position={"relative"}>
       <Topbar routes={routes} />
 
       <Flex w={"full"} h={"full"}>
