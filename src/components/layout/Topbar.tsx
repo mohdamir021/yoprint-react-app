@@ -28,6 +28,10 @@ export default function Topbar({ routes }: TopbarProps) {
       alignItems={"center"}
       justifyContent={"space-between"}
       bg={"rgba(126, 126, 126, 0.1)"}
+      position={"sticky"}
+      top={"0px"}
+      zIndex={1000}
+      bgColor={"#151517"}
       // Outline
       // bgColor={"pink"}
     >
