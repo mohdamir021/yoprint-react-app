@@ -1,33 +1,71 @@
-import { Box, Pagination, Stack, Text, Wrap } from "@chakra-ui/react";
+import { Box, Heading, Pagination, PaginationPageChangeDetails, Stack, Text, Wrap } from "@chakra-ui/react";
 import React, { useEffect, useState } from "react";
 import AnimeCard from "../components/main/AnimeCard";
 import { catchAndLogError, generateArrayOfNumbers } from "../utils/helpers";
 import { animeService } from "../services";
-import { AnimeDetails } from "../interfaces/search";
+import { AnimeDetails, AnimeSearchData } from "../interfaces/search";
 import SearchPagination from "../components/main/SearchPagination";
 import useStatuses from "../hooks/useStatuses";
+import { useRecord } from "../hooks/useRecord";
+import { AnimeIndexParams } from "../interfaces";
+import { CURRENT_YEAR } from "../libs/moment";
 
 export default function Home() {
-  const { isSuccess, isLoading, isError, isEmpty, setSuccess, setEmpty, setLoading, catchError } =
-    useStatuses();
+  const {
+    isSuccess,
+    isLoading,
+    isError,
+    isEmpty,
+    isReFetching,
+    setSuccess,
+    setEmpty,
+    setLoading,
+    setRefetching,
+    catchError,
+  } = useStatuses();
   const [list, setList] = useState<AnimeDetails[]>([]);
+  const [pagination, setPagination] = useState<Partial<AnimeSearchData["pagination"]>>({})
+
+  const {
+    set: setParams,
+    search,
+    page,
+  } = useRecord<AnimeIndexParams>({
+    search: "",
+    page: 1,
+  });
+
+  const handlePage = (page: number) => setParams({ page })
 
   useEffect(() => {
-    if (isLoading && list.length === 0) {
+    if (isLoading || isReFetching) {
       animeService
-        .index({ page: 1, limit: 12, order_by: "start_date", sort: "desc" })
+        .index({
+          search,
+          page,
+          limit: 12,
+          order_by: "start_date",
+          sort: "desc",
+          sfw: 1,
+          status: "airing"
+        })
         .then((response) => {
           setList(response?.data ?? []);
+          setPagination(response?.pagination ?? {})
 
           // Status Update
           setSuccess(true);
           setLoading(false);
-          setEmpty(response?.data.length === 0)
-          
+          setRefetching(false);
+          setEmpty(response?.data.length === 0);
         })
         .catch(catchError);
     }
-  }, [list, isSuccess, isLoading]);
+  }, [list, isSuccess, isLoading, isReFetching]);
+
+  useEffect(() => {
+    setRefetching(true);
+  }, [page]);
 
   return (
     <Stack
@@ -37,6 +75,8 @@ export default function Home() {
       // Outline
       // bgColor={"red"}
     >
+      <Heading my={4} size={"3xl"}>Currently Airing {CURRENT_YEAR}</Heading>
+
       <Wrap
         maxW={"800px"}
         justifyContent={"center"}
@@ -55,7 +95,15 @@ export default function Home() {
         {isEmpty && <Text>No Anime Found</Text>}
       </Wrap>
       {/* Pagination */}
-      {!isEmpty && <SearchPagination />}
+      {!isEmpty && (
+        <SearchPagination
+          page={page}
+          pageSize={12}
+          lastPage={pagination?.last_visible_page ?? 1}
+          count={pagination?.items?.total ?? 0}
+          handlePage={handlePage}
+        />
+      )}
     </Stack>
   );
 }
