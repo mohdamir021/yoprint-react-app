@@ -8,7 +8,7 @@ export default function AnimeCard(props: Partial<AnimeDetails>) {
 
   // transform
   const displayTitle = `${String(title ?? "").substring(0, 48)}${
-    String(title ?? "").length > 0 ? "..." : ""
+    String(title ?? "").length > 48 ? "..." : ""
   }`;
 
   return (
