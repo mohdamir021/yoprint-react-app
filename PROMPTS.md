@@ -140,3 +140,25 @@ src/
 ```
 Create a array number sequence in Typescript.
 ```
+
+### Just asking ChatGPT to refine and analyse the idea of mine of handling objects/records with state
+```
+In a React + Vite with Typescript project, I need a solution for handling generic types. For example. I have an interface called Person and Student, and I want to create a state handler hook for this, something like useRecord<>. This is to achieve something like direct access to the fields and direct manipulation. For example.
+
+interface Person { name: string, age: number }
+interface Student { id: string, year: number }
+
+const {name, age, set: setPerson } = useRecord<Person>();
+const {id, year, set: setStudent } = useRecord<Student>();
+
+setPerson({name, "Akmal"}); // update name
+setPerson({name: "Akmal2", age: 20) // update name and age
+setStudent({id: "001", year: 1}) // update id and year
+setStudent({year: 2}) // update year and keep id value 
+
+While making sure the typescript intelliSense works in VS code.
+
+Please give an analysis of the code that will be given by you, in terms of resource, performance, and in general.
+```
+
+Used in `/src/hooks/useRecord.tsx`
