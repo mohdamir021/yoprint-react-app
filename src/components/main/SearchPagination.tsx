@@ -1,12 +1,38 @@
-import { ButtonGroup, IconButton, Pagination } from "@chakra-ui/react"
-import { LuChevronLeft, LuChevronRight } from "react-icons/lu"
+import {
+  ButtonGroup,
+  IconButton,
+  Pagination,
+  PaginationRootProps,
+} from "@chakra-ui/react";
+import {
+  LuChevronLeft,
+  LuChevronRight,
+  LuChevronsLeft,
+  LuChevronsRight,
+} from "react-icons/lu";
 
+type SearchPaginationProps = PaginationRootProps & {
+  lastPage: number;
+  handlePage: (page: number) => void;
+};
 
+export default function SearchPagination(props: SearchPaginationProps) {
+  const { handlePage = () => {}, lastPage = 1, ...rest } = props;
 
-export default function SearchPagination() {
   return (
-    <Pagination.Root count={20} pageSize={2} defaultPage={1}>
+    <Pagination.Root
+      count={20}
+      pageSize={2}
+      defaultPage={1}
+      onPageChange={(e) => handlePage(e.page)}
+      {...rest}
+    >
       <ButtonGroup variant="outline" size="sm">
+        {/* Start of Page */}
+        <IconButton onClick={() => handlePage(1)}>
+          <LuChevronsLeft />
+        </IconButton>
+
         <Pagination.PrevTrigger asChild>
           <IconButton>
             <LuChevronLeft />
@@ -26,7 +52,12 @@ export default function SearchPagination() {
             <LuChevronRight />
           </IconButton>
         </Pagination.NextTrigger>
+
+        {/* End of Page */}
+        <IconButton onClick={() => handlePage(lastPage)}>
+          <LuChevronsRight />
+        </IconButton>
       </ButtonGroup>
     </Pagination.Root>
-  )
+  );
 }
