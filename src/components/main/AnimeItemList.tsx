@@ -1,28 +1,28 @@
-import { Box, Flex, Heading, Tag, Text, Wrap } from "@chakra-ui/react";
-import { lorem } from "../../libs/lorem";
-import { generateArrayOfNumbers } from "../../utils/helpers";
+import { Box, Flex, Heading, Image, Tag, Text, Wrap } from "@chakra-ui/react";
+import { AnimeDetails } from "../../interfaces/search";
 
-export default function AnimeItemList() {
+export default function AnimeItemList(props: Partial<AnimeDetails>) {
+  const { title, images, synopsis, genres } = props;
+
   return (
     <Flex
       w={"full"}
       maxW={"1000px"}
-      h={"300px"}
       rounded={"8px"}
       borderRadius={"8px"}
       gap={2}
+      my={2}
       px={4}
-      alignItems={"center"}
+      py={2}
+      alignItems={"start"}
+      border={"1px solid"}
+      borderColor={"darkgray"}
       // Outline
-      border={"1px solid red"}
     >
       {/* Anime Source Image */}
-      <Box
-        w={"230px"}
-        h={"280px"}
-        // Outline
-        bg="red"
-      ></Box>
+      <Box pt={5}>
+        <Image alt={title} src={images?.webp.image_url} w={"230px"}/>
+      </Box>
 
       {/* Anime Details */}
       <Box
@@ -30,17 +30,15 @@ export default function AnimeItemList() {
         w={"full"}
         py={2}
         px={3}
-        // Outline
-        border={"1px solid yellow"}
       >
-        <Heading my={1}>Anime Title</Heading>
+        <Heading my={1}>{title}</Heading>
 
-        <Text>{lorem.generateParagraphs(1)}</Text>
+        <Text>{synopsis}</Text>
 
         <Wrap mt={3}>
-          {generateArrayOfNumbers(20).map((n) => (
-            <Tag.Root key={`${n}-anime-tag`}>
-              <Tag.Label>Anime</Tag.Label>
+          {genres?.map((genre) => (
+            <Tag.Root key={`${genre.mal_id}-anime-tag`}>
+              <Tag.Label>{genre.name}</Tag.Label>
             </Tag.Root>
           ))}
         </Wrap>
