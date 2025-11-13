@@ -6,16 +6,19 @@ import Layout from "./components/layout/Layout";
 import { Box } from "@chakra-ui/react";
 import Show from "./pages/Show";
 import NotFound from "./pages/NotFound";
+import { IoHome } from "react-icons/io5";
+import { MdBookmarks } from "react-icons/md";
 
 export interface RouteType {
   caption: string;
   path: string;
   element: React.JSX.Element;
+  icon?: React.JSX.Element;
 }
 
 const routes: RouteType[] = [
-  { caption: "Home", path: "/", element: <Home /> },
-  { caption: "List", path: "/list", element: <List /> },
+  { caption: "Home", path: "/", element: <Home />, icon: <IoHome /> },
+  { caption: "My List", path: "/list", element: <List />, icon: <MdBookmarks /> },
 ];
 
 const hiddenRoutes: RouteType[] = [
@@ -26,14 +29,8 @@ const hiddenRoutes: RouteType[] = [
 const allRoutes: RouteType[] = [...routes, ...hiddenRoutes]
 
 function App() {
-  // const [count, setCount] = useState(0);
-
   return (
     <Box w={"full"} h={"100vh"}>
-      {/* Navigation Links */}
-      {/* <nav>
-        <Link to="/">Home</Link> | <Link to="/list">List</Link> |{" "}
-      </nav> */}
 
       <Layout routes={routes}>
         {/* Routes Configuration */}
