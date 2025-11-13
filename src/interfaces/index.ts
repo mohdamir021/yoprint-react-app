@@ -34,16 +34,16 @@ export type AnimeOrderBy =
 
 export type AnimeIndexParams = Partial<PaginationType & {
   q: string;
-  type: AnimeType
+  type: AnimeType | ""
   score: number
   min_score: number
   max_score: number
-  status: AnimeStatus
-  rating: AnimeRating
+  status: AnimeStatus | ""
+  rating: AnimeRating | ""
   sfw: 0 | 1
   genres: string
   genres_exclude: string
-  order_by: AnimeOrderBy
+  order_by: AnimeOrderBy | ""
   sort: "desc" | "asc",
   letter: string;
   producers: string;
