@@ -3,7 +3,7 @@
 ### Basic Functionality of React Redux with Redux Toolkit
 Prompt:
 ```
-With React + Vite with Typescript project setup, what is the basic setup redux with redux toolkit and implements its usage?
+With React + Vite with Typescript project setup, what is the basic setup redux with redux toolkit and implements its usage like dispatch method including with payload?
 ```
 
 Summary:
@@ -162,3 +162,13 @@ Please give an analysis of the code that will be given by you, in terms of resou
 ```
 
 Used in `/src/hooks/useRecord.tsx`
+
+### Quick help to create debounce helper function utility.
+```
+In React + Vite project with Typescript, help me create a debounce helper function that also accepts a generic type.
+```
+
+### Quick help to create a `scrollTo` helper function utility
+```
+In React + Vite project with Typescript, help me create a scroll to helper function that goes to specific element or location of the page when the function is called.
+```
