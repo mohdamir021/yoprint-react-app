@@ -32,7 +32,14 @@ export default function AnimeCard(props: Partial<AnimeDetails>) {
       border={"1px solid"}
       borderColor={"#595959ff"}
     >
-      <Image alt={title} src={images?.webp.image_url} w={"160px"} h={"200px"} />
+      <Link to={`/show/${mal_id}`}>
+        <Image
+          alt={title}
+          src={images?.webp.image_url}
+          w={"160px"}
+          h={"200px"}
+        />
+      </Link>
 
       <Link to={`/show/${mal_id}`}>
         <Tooltip
@@ -70,10 +77,7 @@ export function LoadingCard() {
     >
       <Skeleton w={"160px"} h={"200px"} />
 
-      <SkeletonText
-        fontSize={"14px"}
-        noOfLines={2}
-      />
+      <SkeletonText fontSize={"14px"} noOfLines={2} />
     </VStack>
   );
 }
