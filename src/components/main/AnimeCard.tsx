@@ -11,7 +11,7 @@ import { AnimeDetails } from "../../interfaces/search";
 import { Tooltip } from "../ui/tooltip";
 
 export default function AnimeCard(props: Partial<AnimeDetails>) {
-  const { title, images } = props;
+  const { title, images, mal_id } = props;
 
   // transform
   const displayTitle = `${String(title ?? "").substring(0, 48)}${
@@ -34,7 +34,7 @@ export default function AnimeCard(props: Partial<AnimeDetails>) {
     >
       <Image alt={title} src={images?.webp.image_url} w={"160px"} h={"200px"} />
 
-      <Link to={"/show/anime-id"}>
+      <Link to={`/show/${mal_id}`}>
         <Tooltip
           content={title}
           contentProps={{
