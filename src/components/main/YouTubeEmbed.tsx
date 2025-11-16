@@ -16,9 +16,9 @@ const YouTubeEmbed: React.FC<YouTubeEmbedProps> = ({
      <Box overflow="hidden" borderRadius={borderRadius} w="100%">
       <AspectRatio ratio={16 / 9}>
         <iframe
-          src={videoUrl}
+          src={`${videoUrl}?autoplay=0`}
           title={title}
-          allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+          allow="accelerometer; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
           allowFullScreen
           style={{ border: 0 }}
         />
