@@ -175,5 +175,5 @@ In React + Vite project with Typescript, help me create a scroll to helper funct
 
 ### Quick help to make an embedded Youtube Player component
 ```
-In my React + Vite with Typescript project, can you help me create a component file for Youtube Embedded player?
+In my React + Vite with Typescript project, can you help me create a component file for Youtube Embedded player? Please include ways to enable or disable autoplay.
 ```
