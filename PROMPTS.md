@@ -172,3 +172,8 @@ In React + Vite project with Typescript, help me create a debounce helper functi
 ```
 In React + Vite project with Typescript, help me create a scroll to helper function that goes to specific element or location of the page when the function is called.
 ```
+
+### Quick help to make an embedded Youtube Player component
+```
+In my React + Vite with Typescript project, can you help me create a component file for Youtube Embedded player?
+```
