@@ -1,40 +1,208 @@
-import { Box, Flex, Heading, HStack, Stack, Text, VStack } from "@chakra-ui/react";
-import React from "react";
+import {
+  Box,
+  Flex,
+  Heading,
+  HStack,
+  Image,
+  Separator,
+  Spacer,
+  Stack,
+  Table,
+  Text,
+  VStack,
+  Wrap,
+} from "@chakra-ui/react";
+import React, { useEffect, useState } from "react";
 import { lorem } from "../libs/lorem";
+import { useParams, useSearchParams } from "react-router-dom";
+import { animeService } from "../services";
+import useStatuses from "../hooks/useStatuses";
+import { AnimeDetails, AnimeFullDetails } from "../interfaces/search";
+import { toCapitalize } from "../utils/helpers";
+import YouTubeEmbed from "../components/main/YouTubeEmbed";
 
 export default function Show() {
-  // consoles
-  console.log("Show");
+  // params
+  const params = useParams();
+
+  // states
+  const status = useStatuses();
+  const [anime, setAnime] = useState<Partial<AnimeFullDetails> | undefined>({});
+
+  // API Fetch
+  useEffect(() => {
+    const id = params?.id;
+    if (id) {
+      animeService
+        .show(id, true)
+        .then((response) => {
+          // set data
+          setAnime(response?.data);
+          // status update
+          status.setSuccess(true);
+          status.setLoading(false);
+        })
+        .catch(status.catchError);
+    }
+  }, [params.id]);
+
+  const info = [
+    ["Source", anime?.source],
+    ["Genres", anime?.genres?.map((genre) => genre.name).join(", ")],
+    ["Themes", anime?.themes?.map((theme) => theme.name).join(", ")],
+    [
+      "Demographics",
+      anime?.demographics?.map((demographic) => demographic.name).join(", "),
+    ],
+    ["Rating", anime?.rating],
+  ];
+
+  const broadcastInfo = [
+    ["Type", anime?.type],
+    ["Status", anime?.status],
+    ["Season", toCapitalize(anime?.season)],
+    ["Year", anime?.year],
+    ["Airing", anime?.aired?.string],
+    ["Episodes", anime?.episodes],
+    ["Duration", anime?.duration],
+    ["Broadcast", anime?.broadcast?.string],
+    [
+      "Streaming",
+      anime?.streaming?.map((streaming) => streaming?.name).join(", "),
+    ],
+  ];
+
+  const ranking = [
+    ["Ranked", anime?.rank],
+    ["Popularity", anime?.popularity],
+    ["Members", anime?.members],
+  ];
 
   return (
     <VStack w={"full"} h={"full"} px={"6"} py={"4"}>
-
       {/* Upper Part */}
-      <Heading size={"3xl"}>Anime Name</Heading>
+      <Heading size={"3xl"} mb={3}>
+        {anime?.title}
+      </Heading>
 
-      <HStack align={"start"} w={"full"} maxW={"900px"} gap={"30px"}>
-        <Box
-          minW={"260px"}
-          minH={"320px"}
-          // outline
-          border={"1px solid yellow"}
-        >
-          <Text>Picture</Text>
+      <Stack
+        direction={{ base: "column", lg: "row" }}
+        align={{ base: "center", lg: "start" }}
+        w={"full"}
+        maxW={"1200px"}
+        gap={"30px"}
+      >
+        <Stack w={"full"} maxW={"360px"} minH={"320px"} alignItems={"center"}>
+          <Image
+            alt={anime?.title}
+            src={anime?.images?.webp?.large_image_url}
+            maxW={"300px"}
+          />
 
-        </Box>
+          <Stack mt={3} px={2} w={"full"}>
+            {/* Block */}
+            <Heading size={"md"}>Alternative Titles</Heading>
+            <Separator />
+            {anime?.titles?.map((title) => (
+              <Text
+                key={`${title.type}-title`}
+                fontSize={"small"}
+                letterSpacing={"wide"}
+              >
+                {title.title} ({title.type})
+              </Text>
+            ))}
+            <Spacer h={"20px"} />
+            {/* End of Block */}
 
-        <Stack
-          h={"full"}
-          w={"full"}
-          p={2}
-          // Outline
-          border={"1px solid orange"}
-        >
-          <Text>{lorem.generateParagraphs(1)}</Text>
-          <Text>{lorem.generateParagraphs(1)}</Text>
-          <Text>{lorem.generateParagraphs(1)}</Text>
+            {/* Block */}
+            <Heading size={"md"}>Information</Heading>
+            <Separator />
+            <Table.Root fontSize={"small"} size="sm" variant={"line"} unstyled>
+              <Table.Body>
+                {info.map(([label, value], index) => (
+                  <Table.Row key={`${index}-${label}`}>
+                    <Table.Cell py={1}>{label}</Table.Cell>
+                    <Table.Cell>
+                      {value === "" ? "-NA-" : value ?? "-NA-"}
+                    </Table.Cell>
+                  </Table.Row>
+                ))}
+              </Table.Body>
+            </Table.Root>
+            <Spacer h={"20px"} />
+            {/* End of Block */}
+          </Stack>
         </Stack>
-      </HStack>
+
+        <Stack h={{ base: "fit-content", lg: "full" }} w={"full"} p={2}>
+          {/* Block */}
+          <Heading size={"xl"}>Rankings</Heading>
+          <Separator />
+          <HStack w={"full"}>
+            <VStack minW={"100px"} ml={3}>
+              <Text
+                px={4}
+                py={1}
+                bgColor={"darkblue"}
+                fontSize={"md"}
+                fontWeight={600}
+              >
+                Score
+              </Text>
+              <Text fontSize={"lg"} fontWeight={700}>
+                {anime?.score ?? "-NA-"}
+              </Text>
+              <Text fontSize={"md"} fontWeight={400}>
+                {anime?.scored_by ?? "0"} users
+              </Text>
+            </VStack>
+            <Separator mx={4} h={"full"} orientation={"vertical"} />
+
+            <Wrap>
+              {ranking?.map(([label, value], index) => (
+                <Text key={`${index}-${label}`} fontSize={"xl"} mr={3}>
+                  {label} <span style={{ fontWeight: 600 }}>#{value}</span>
+                </Text>
+              ))}
+            </Wrap>
+          </HStack>
+          <Spacer h={"20px"} />
+
+          <Box mb={6} w={"full"} h={"fit-content"}>
+            <Heading my={4}>Trailer</Heading>
+            {anime?.trailer?.embed_url ? (
+              <YouTubeEmbed videoUrl={anime?.trailer?.embed_url} />
+            ) : (
+              <Text fontSize={"md"}>No trailer available</Text>
+            )}
+          </Box>
+
+          {/* Block */}
+          <Heading size={"xl"}>Sysnopsis</Heading>
+          <Separator />
+          <Text>{anime?.synopsis}</Text>
+          <Spacer h={"20px"} />
+          {/* End of Block */}
+
+          <Heading size={"xl"}>Broadcast Information</Heading>
+          <Separator />
+          <Table.Root size="md">
+            <Table.Body>
+              {broadcastInfo.map(([label, value], index) => (
+                <Table.Row key={`${index}-${label}`}>
+                  <Table.Cell w={"200px"}>{label}</Table.Cell>
+                  <Table.Cell>
+                    {value === "" ? "-NA-" : value ?? "-NA-"}
+                  </Table.Cell>
+                </Table.Row>
+              ))}
+            </Table.Body>
+          </Table.Root>
+          <Spacer h={"20px"} />
+          {/* End of Block */}
+        </Stack>
+      </Stack>
     </VStack>
   );
 }
