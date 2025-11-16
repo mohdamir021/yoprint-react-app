@@ -9,11 +9,7 @@ import {
 } from "@chakra-ui/react";
 import { ChangeEvent, useEffect, useState } from "react";
 import AnimeCard, { LoadingCard } from "../components/main/AnimeCard";
-import {
-  debounce,
-  generateArrayOfNumbers,
-  scrollTo,
-} from "../utils/helpers";
+import { debounce, generateArrayOfNumbers, scrollTo } from "../utils/helpers";
 import { animeService } from "../services";
 import { AnimeDetails, AnimeSearchData } from "../interfaces/search";
 import SearchPagination from "../components/main/SearchPagination";
@@ -21,12 +17,14 @@ import useStatuses from "../hooks/useStatuses";
 import { useRecord } from "../hooks/useRecord";
 import { AnimeIndexParams, AnimeStatus } from "../interfaces";
 import { CURRENT_YEAR } from "../libs/moment";
-import { AppDispatch, useAppDispatch, useAppSelector } from "../store/store";
 import { LuSearch } from "react-icons/lu";
 import { TbListDetails } from "react-icons/tb";
 import { IoGrid } from "react-icons/io5";
-import AnimeItemList from "../components/main/AnimeItemList";
+import AnimeItemList, {
+  LoadingItemList,
+} from "../components/main/AnimeItemList";
 import SimpleAlert from "../components/main/SimpleAlert";
+import { toaster } from "../components/ui/toaster";
 
 // constants
 const HEADINGS: Record<AnimeStatus | "", string> = {
@@ -66,13 +64,25 @@ export default function Home() {
   const { q, page, status } = params;
 
   // handler
+  const toastIsRefetching = () => {
+    toaster.create({
+      description: "Anime list is updating ...",
+      type: "loading",
+    });
+  };
   const handlePage = (page: number) => {
     setParams({ page });
     scrollTo("top-content");
+    toastIsRefetching();
   };
   const handleSearch = debounce((e: ChangeEvent<HTMLInputElement>) => {
     setParams({ q: e.target.value, page: 1 });
+    toastIsRefetching();
   }, 500);
+  const handleStatusTab = (tab: Tabs.TabsValueChangeDetails) => {
+    setParams({ status: tab.value as AnimeStatus, page: 1 });
+    toastIsRefetching();
+  };
 
   useEffect(() => {
     if (isLoading || isReFetching) {
@@ -88,7 +98,10 @@ export default function Home() {
           setRefetching(false);
           setEmpty(response?.data.length === 0);
         })
-        .catch(catchError);
+        .catch(catchError)
+        .finally(() => {
+          toaster.dismiss();
+        });
     }
   }, [list, isSuccess, isLoading, isReFetching]);
 
@@ -149,9 +162,7 @@ export default function Home() {
             fitted
             w={"full"}
             value={status}
-            onValueChange={(tab) =>
-              setParams({ status: tab.value as AnimeStatus, page: 1 })
-            }
+            onValueChange={handleStatusTab}
           >
             <Tabs.List>
               <Tabs.Trigger px={2} value="">
@@ -193,12 +204,29 @@ export default function Home() {
           </Wrap>
         </Tabs.Content>
         <Tabs.Content value="tab-2">
-          {list.map((data, index) => (
-            <AnimeItemList
-              key={`${index}_${data.mal_id}_anime-item-list`}
-              {...data}
+          {isLoading && <LoadingLists />}
+          {isError && (
+            <SimpleAlert
+              status={"error"}
+              header="Error"
+              description="Failed to fetch the data..."
             />
-          ))}
+          )}
+          {isEmpty && (
+            <SimpleAlert
+              status={"neutral"}
+              header="Empty"
+              description="There's no anime list available..."
+            />
+          )}
+          {isSuccess &&
+            !isEmpty &&
+            list.map((data, index) => (
+              <AnimeItemList
+                key={`${index}_${data.mal_id}_anime-item-list`}
+                {...data}
+              />
+            ))}
         </Tabs.Content>
       </Tabs.Root>
       {/* Pagination */}
@@ -219,5 +247,10 @@ export default function Home() {
 const LoadingGrids = () => {
   return generateArrayOfNumbers(8).map((n) => (
     <LoadingCard key={`${n}-loading-card`} />
+  ));
+};
+const LoadingLists = () => {
+  return generateArrayOfNumbers(3).map((n) => (
+    <LoadingItemList key={`${n}-loading-card`} />
   ));
 };
