@@ -1,5 +1,5 @@
 import { AnimeIndexParams, PaginationType } from "../interfaces";
-import { AnimeSearchData } from "../interfaces/search";
+import { AnimeFullDetails, AnimeSearchData } from "../interfaces/search";
 import jikanAPI from "../libs/axios";
 
 export const animeService = {
@@ -16,7 +16,7 @@ export const animeService = {
   async show (id: string, isShowFull?: boolean) {
     try {
       const {data} = await jikanAPI.get(`/anime/${id}${isShowFull ? "/full" : ""}`);
-      return data;
+      return data as {data: AnimeFullDetails};
     } catch (error) {
       console.log(error)
     }
