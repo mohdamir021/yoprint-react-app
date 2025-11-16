@@ -62,3 +62,9 @@ export const scrollTo = (
   }
 };
 
+// String
+export function toCapitalize(string: unknown) {
+  const text = String(string ?? "-NA-");
+  return `${text.at(0)?.toUpperCase()}${text.substring(1)}`;
+}
+
