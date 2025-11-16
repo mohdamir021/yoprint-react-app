@@ -52,7 +52,16 @@ export interface AnimeDetails {
   genres: Genre[]
   explicit_genres: any[]
   themes: Theme[]
-  demographics: Demographic[]
+  demographics: Demographic[],
+}
+
+export interface AnimeFullDetails extends AnimeDetails {
+  streaming: Streaming[]
+}
+
+export interface Streaming {
+ name: string,
+ url: string
 }
 
 export interface Images {
