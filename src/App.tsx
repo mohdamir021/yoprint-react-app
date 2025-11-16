@@ -8,6 +8,7 @@ import Show from "./pages/Show";
 import NotFound from "./pages/NotFound";
 import { IoHome } from "react-icons/io5";
 import { MdBookmarks } from "react-icons/md";
+import { Toaster } from "./components/ui/toaster";
 
 export interface RouteType {
   caption: string;
@@ -18,20 +19,24 @@ export interface RouteType {
 
 const routes: RouteType[] = [
   { caption: "Home", path: "/", element: <Home />, icon: <IoHome /> },
-  { caption: "My List", path: "/list", element: <List />, icon: <MdBookmarks /> },
+  {
+    caption: "My List",
+    path: "/list",
+    element: <List />,
+    icon: <MdBookmarks />,
+  },
 ];
 
 const hiddenRoutes: RouteType[] = [
-  {caption: "Show", path: "/show/:id", element: <Show />},
-  {caption: "Not Found", path: "*", element: <NotFound />}
-]
+  { caption: "Show", path: "/show/:id", element: <Show /> },
+  { caption: "Not Found", path: "*", element: <NotFound /> },
+];
 
-const allRoutes: RouteType[] = [...routes, ...hiddenRoutes]
+const allRoutes: RouteType[] = [...routes, ...hiddenRoutes];
 
 function App() {
   return (
     <Box w={"full"} h={"100vh"}>
-
       <Layout routes={routes}>
         {/* Routes Configuration */}
         <Routes>
@@ -39,6 +44,8 @@ function App() {
             <Route key={`${index}_${path}`} path={path} element={element} />
           ))}
         </Routes>
+        {/* Toaster */}
+        <Toaster />
       </Layout>
     </Box>
   );
