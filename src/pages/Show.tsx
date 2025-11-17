@@ -1,6 +1,6 @@
 import {
   Box,
-  Flex,
+  Button,
   Heading,
   HStack,
   Image,
@@ -15,14 +15,14 @@ import {
   Wrap,
 } from "@chakra-ui/react";
 import React, { useEffect, useState } from "react";
-import { lorem } from "../libs/lorem";
-import { useParams, useSearchParams } from "react-router-dom";
+import { useParams } from "react-router-dom";
 import { animeService } from "../services";
 import useStatuses from "../hooks/useStatuses";
-import { AnimeDetails, AnimeFullDetails } from "../interfaces/search";
+import { AnimeFullDetails } from "../interfaces/search";
 import { toCapitalize } from "../utils/helpers";
 import YouTubeEmbed from "../components/main/YouTubeEmbed";
 import SimpleAlert from "../components/main/SimpleAlert";
+import { FaArrowLeft } from "react-icons/fa6";
 
 export default function Show() {
   // params
@@ -82,8 +82,19 @@ export default function Show() {
     ["Members", anime?.members],
   ];
 
+  const handleBack = () => {
+    window.history.back()
+  }
+
   return (
     <VStack w={"full"} h={"full"} px={"6"} py={"4"}>
+      {/* Header */}
+      <HStack px={2} w={"full"} maxW={"1200px"} h={"60px"}>
+        <Button variant={"outline"} border={"1px solid gray"} onClick={handleBack}>
+          <FaArrowLeft />
+          Back</Button>
+      </HStack>
+
       {/* Title */}
       {status.isLoading && <Skeleton w={"400px"} h={"40px"} />}
       <Heading size={"3xl"} mb={3}>
