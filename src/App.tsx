@@ -9,6 +9,7 @@ import NotFound from "./pages/NotFound";
 import { IoHome } from "react-icons/io5";
 import { MdBookmarks } from "react-icons/md";
 import { Toaster } from "./components/ui/toaster";
+import FavouriteIcon from "./components/icons/FavouriteIcon";
 
 export interface RouteType {
   caption: string;
@@ -23,7 +24,7 @@ const routes: RouteType[] = [
     caption: "My List",
     path: "/list",
     element: <List />,
-    icon: <MdBookmarks />,
+    icon: <FavouriteIcon />,
   },
 ];
 
