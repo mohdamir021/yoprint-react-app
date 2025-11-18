@@ -1,17 +1,33 @@
 import {
   Box,
+  HStack,
   Image,
   Skeleton,
   SkeletonText,
   Text,
+  useDisclosure,
   VStack,
 } from "@chakra-ui/react";
 import { Link } from "react-router-dom";
 import { AnimeDetails } from "../../interfaces/search";
 import { Tooltip } from "../ui/tooltip";
+import FavoriteButton from "./FavoriteButton";
+import useFavourite from "../../hooks/useFavourite";
+import SimpleDialog from "./SimpleDialog";
 
-export default function AnimeCard(props: Partial<AnimeDetails>) {
-  const { title, images, mal_id } = props;
+interface AnimeCardProps {
+  data: Partial<AnimeDetails>;
+  toggleFavouriteWithDialog?: boolean;
+}
+
+export default function AnimeCard(props: AnimeCardProps) {
+  const { data, toggleFavouriteWithDialog } = props;
+
+  // favourites
+  const { isFavourite, toggleFavorite } = useFavourite(data);
+  const favDisclosure = useDisclosure();
+
+  const { title, images, mal_id } = data;
 
   // transform
   const displayTitle = `${String(title ?? "").substring(0, 48)}${
@@ -22,7 +38,7 @@ export default function AnimeCard(props: Partial<AnimeDetails>) {
     <VStack
       w={"full"}
       maxW={"180px"}
-      h={"280px"}
+      minH={"200px"}
       p={1}
       rounded={"5px"}
       borderRadius={"5px"}
@@ -31,6 +47,7 @@ export default function AnimeCard(props: Partial<AnimeDetails>) {
       textAlign={"center"}
       border={"1px solid"}
       borderColor={"#595959ff"}
+      position={"relative"}
     >
       <Link to={`/show/${mal_id}`}>
         <Image
@@ -56,6 +73,30 @@ export default function AnimeCard(props: Partial<AnimeDetails>) {
           </Text>
         </Tooltip>
       </Link>
+
+      <Box h={"30px"} />
+      <HStack position={"absolute"} top={0} right={0}>
+        <FavoriteButton
+          size={"sm"}
+          bg={"black"}
+          _hover={{ bg: "darkgray" }}
+          favouriteValue={isFavourite}
+          onClick={
+            toggleFavouriteWithDialog ? favDisclosure.onOpen : toggleFavorite
+          }
+        />
+      </HStack>
+
+      <SimpleDialog
+        disclosure={favDisclosure}
+        title={`${isFavourite ? "Unfavorite" : "Favorite"} Anime?`}
+        description={`${
+          isFavourite ? "Remove from" : "Add to"
+        } favorite anime list?`}
+        onConfirm={() => {
+          toggleFavorite();
+        }}
+      />
     </VStack>
   );
 }
