@@ -198,7 +198,7 @@ export default function Home() {
               list.map((data, index) => (
                 <AnimeCard
                   key={`${index}_${data.mal_id}_anime-card`}
-                  {...data}
+                  data={data}
                 />
               ))}
           </Wrap>
@@ -224,7 +224,7 @@ export default function Home() {
             list.map((data, index) => (
               <AnimeItemList
                 key={`${index}_${data.mal_id}_anime-item-list`}
-                {...data}
+                data={data}
               />
             ))}
         </Tabs.Content>
