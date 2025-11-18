@@ -2,18 +2,35 @@ import {
   Box,
   Flex,
   Heading,
+  HStack,
   Image,
   Skeleton,
   SkeletonText,
+  Spacer,
   Tag,
   Text,
+  useDisclosure,
   Wrap,
 } from "@chakra-ui/react";
 import { AnimeDetails } from "../../interfaces/search";
 import { Link } from "react-router-dom";
+import FavoriteButton from "./FavoriteButton";
+import useFavourite from "../../hooks/useFavourite";
+import SimpleDialog from "./SimpleDialog";
 
-export default function AnimeItemList(props: Partial<AnimeDetails>) {
-  const { title, images, synopsis, genres, mal_id } = props;
+interface AnimeItemListProps {
+  data: Partial<AnimeDetails>;
+  toggleFavouriteWithDialog?: boolean;
+}
+
+export default function AnimeItemList(props: AnimeItemListProps) {
+  const { data, toggleFavouriteWithDialog } = props;
+  const favDisclosure = useDisclosure();
+
+  // favourite
+  const { isFavourite, toggleFavorite } = useFavourite(data);
+
+  const { title, images, synopsis, genres, mal_id } = data;
 
   return (
     <Flex
@@ -28,7 +45,7 @@ export default function AnimeItemList(props: Partial<AnimeDetails>) {
       alignItems={"start"}
       border={"1px solid"}
       borderColor={"darkgray"}
-      // Outline
+      position={"relative"}
     >
       {/* Anime Source Image */}
       <Link to={`/show/${mal_id}`}>
@@ -54,7 +71,30 @@ export default function AnimeItemList(props: Partial<AnimeDetails>) {
             </Tag.Root>
           ))}
         </Wrap>
+
+        <Spacer h={"full"} />
+
+        {/* Bottom */}
+        <HStack position={"absolute"} top={1} right={1} justifyContent={"end"}>
+          <FavoriteButton
+            favouriteValue={isFavourite}
+            onClick={
+              toggleFavouriteWithDialog ? favDisclosure.onOpen : toggleFavorite
+            }
+          />
+        </HStack>
       </Box>
+
+      <SimpleDialog
+        disclosure={favDisclosure}
+        title={`${isFavourite ? "Unfavorite" : "Favorite"} Anime?`}
+        description={`${
+          isFavourite ? "Remove from" : "Add to"
+        } favorite anime list?`}
+        onConfirm={() => {
+          toggleFavorite();
+        }}
+      />
     </Flex>
   );
 }
